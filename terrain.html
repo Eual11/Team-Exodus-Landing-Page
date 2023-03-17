@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Exodus</title>
+    <script async src="https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js"></script>
+    <script type="x-shader/x-vertex"  id="vertexshader">
+
+        uniform float time;
+        attribute float size;
+       attribute vec3 color;
+       uniform float w;
+        uniform float h;
+       varying vec3 vPosition;
+        varying vec3 vColor;
+        void main()
+        {
+            vColor = color;
+            vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
+            vec3 st = abs(position/vec3(w));
+            float dist = distance(st,vec3(0.5));
+            gl_PointSize =size+10.*dist*(sin(dist+time));
+
+          
+            gl_Position = projectionMatrix * mvPosition;
+        }
+
+
+
+    </script>
+
+    <script type="x-shader/x-fragment" id="fragmentshader">
+        uniform sampler2D pointTexture;
+
+        varying vec3 vColor;
+
+        void main() {
+
+            gl_FragColor = vec4( vColor, 1.0 );
+            //gl_FragColor
+            gl_FragColor = gl_FragColor*texture2D(pointTexture,gl_PointCoord); 
+
+
+
+        }
+        
+    </script>
+
+    <script type="importmap">
+        {
+            "imports": 
+            {
+                "three": "https://unpkg.com/three@0.150.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.150.0/examples/jsm/"
+            }
+        }
+    </script>
+    <script src="/src/terrain.js" type="module" defer>
+        
+    </script>
+    <script type="x-shader/x-vertex" id="rocks_vertexshader">
+
+        varying vec3 pt_position;
+        #define PI 3.14159265359
+        uniform float time;
+        #define u_time time
+        vec3 results;
+        float theta;
+        void main()
+        {
+            gl_PointSize = 3.;
+            pt_position = position;
+            float x = position.x;
+            float y = position.y;
+            float z = position.z;
+
+            vec3 uvw = pt_position.xyz;
+
+           float dist = 1./length(uvw);
+           dist*=0.2;
+
+           float g = pow(dist,0.4);
+
+           
+            theta = u_time*g;
+            results = position;
+            results.x = x*cos(theta*2.*PI)-z*sin(theta*2.*PI);
+            results.z  -x*sin(theta*2.*PI)+z*cos(theta*2.*PI);
+            results.y = y;
+            gl_Position = projectionMatrix*modelViewMatrix*vec4(results,1.);
+        }
+    </script>
+    <script type="x-shader/x-fragment" id="rocks_fragmentshader" defer>
+
+        uniform float time;
+        uniform float w;
+        uniform float h;
+        varying vec3 pt_position;
+        #define u_time time
+
+        float circle(vec3 coords, float radius, vec3 offset)
+        {
+            float d = length(coords);
+            return d-radius; //step(-radius,-d);
+        }
+        void main()
+        {
+           vec3 uvw = pt_position.xyz;
+
+           float dist = 1./length(uvw);
+
+            dist*=0.3;
+
+           float g = pow(dist,0.1);
+
+           vec3 color = vec3(1.0, 0.9, 0.25)*g;
+
+           gl_FragColor = vec4(color,1.);
+
+        }
+    </script>
+    
+    <style>
+        @import url("css/style.css");
+    </style>
+    <script></script>
+</head>
+<body>
+</body>
+</html>
