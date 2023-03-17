@@ -1,0 +1,35 @@
+@import "https://fonts.googleapis.com/css2?family=Megrim&display=swap";
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,400;0,500;1,400&family=Monoton&family=Playfair+Display:wght@400;500&family=Press+Start+2P&family=Raleway&family=Roboto&display=swap');
+body{
+  overflow: hidden;
+  margin: 0;
+background-color: black !important;
+
+}
+h1{
+  font-family: "Raleway", cursive;
+  color: white;
+}
+#bg {
+width: 100vw;
+height: 100vh;
+}
+
+#word{
+  font-family: Raleway, cursive;
+  font-size: 1.8em;
+  text-transform: capitalize;
+  font-weight: 600;
+  /* width: 100vw;
+  height: 100vh; */
+  position: absolute;
+  margin: 50;
+  margin-top: 10px;
+  /*bottom: 0;*/
+  color: white;
+  /* backdrop-filter: blur(10px); */
+}
+#donut 
+{
+  font-family: "Megrim";
+}
